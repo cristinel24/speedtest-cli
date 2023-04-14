@@ -1,0 +1,13 @@
+{
+  "name": "network-speed",
+  "version": "0.0.0",
+  "description": "Network Speed",
+  "main": "app.js",
+  "author": {
+    "name": ""
+  },
+  "dependencies": {
+    "delay": "^5.0.0",
+    "puppeteer": "^19.8.5"
+  }
+}
