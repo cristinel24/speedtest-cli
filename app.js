@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer')
+const readline = require('readline');
 const url = 'https://rcs-rds.speedtestcustom.com/'
 let stats = {
     latency: undefined,
@@ -9,11 +10,44 @@ let stats = {
     city: undefined,
     provider: undefined,
     isDone: false
-};
+}, __ = 0;
 
-async function update() {
-    console.clear();
-    console.log(stats);
+function colorize(color, output) {
+    return ['\033[', color, 'm', output, '\033[0m'].join('');
+}
+
+function ask(query) {
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
+
+    return new Promise(resolve => rl.question(query, ans => {
+        rl.close();
+        resolve(ans);
+    }))
+}
+
+async function update(index) {
+
+    if (index == 0 && !__) { process.stdout.write(`\n`); __ = 1; }
+
+    switch (index) {
+        case 1:
+            process.stdout.clearLine(1)
+            process.stdout.cursorTo(0);
+            process.stdout.write(`${colorize(90, 'Download: ')}`);
+            process.stdout.write(`${colorize(32, (stats.down).toFixed(1))}`);
+            process.stdout.write(` mb/s`); break;
+        case 0:
+            process.stdout.clearLine(1)
+            process.stdout.cursorTo(0);
+            process.stdout.write(`${colorize(90, 'Upload: ')}`);
+            process.stdout.write(`${colorize(32, (stats.up).toFixed(1))}`);
+            process.stdout.write(` mb/s`); break;
+            break;
+    }
+
 }
 
 async function checkinternet() {
@@ -51,16 +85,44 @@ async function checkinternet() {
 
         if (stats.isDone != false) {
             stats.isDone = true;
-            update();
+            process.stdout.write(`${colorize(90 ,`\nIPv6: `)}`);
+            process.stdout.write(`${colorize(36, stats.user_ip)}\n`);
+            process.stdout.write(`${colorize(90, `City: `)}`);
+            process.stdout.write(`${colorize(36, stats.city)}\n`);
+            process.stdout.write(`${colorize(90, `Provider: `)}`);
+            process.stdout.write(`${colorize(36, stats.provider)}\n`);
             break;
         }
-        for (propres in result) 
-            for (prop in stats) 
-                if (prop == propres && result[propres] !== (null && "undefined" && false && undefined)) 
-                    stats[prop] = result[propres];    
+
+        for (propres in result) {
+            for (prop in stats) {
+                if (prop == propres && result[propres] !== (null && "undefined" && undefined)) {
+                    if (prop == 'latency' && stats[prop] == undefined) {
+                        process.stdout.write(`${colorize(90, 'Latency: ')}`);
+                        process.stdout.write(`${colorize(32, result.latency)}`);
+                        process.stdout.write(` ms\n`);   
+                    }
+                    else if (prop == 'jitter' && stats[prop] == undefined) {
+                        process.stdout.write(`${colorize(90, 'Jitter: ')}`);
+                        process.stdout.write(`${colorize(32, result.jitter)}`);
+                        process.stdout.write(` ms\n`);
+                    }   
+                    else if (stats[prop] && result[propres] && prop == 'down')
+                        update(1);
+                    else if (stats[prop] && result[propres] && prop == 'up') {
+                        update(0);
+                    }
+                    stats[prop] = result[propres];
+                }
+            }
+        }
     }
+    browser.close()
+    await ask("\n\x1b[5mPress Enter to close the program...");
 }
+console.log("\x1b[2m", ".______________________________________________________.")
+console.log("\x1b[2m", "| --------------- Network-SpeedTest CLI ---------------|\x1b[0m")
+console.log("\x1b[2m", "| by Cristian Andrei                                   |\x1b[0m")
+console.log("\x1b[2m", "|______________________________________________________|\x1b[0m\n")
 
 checkinternet();
-
-
