@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const puppeteer = require('puppeteer')
+const { exec, execSync }= require('child_process')
 const url = 'https://rcs-rds.speedtestcustom.com/'
 let stats = {
     latency: undefined,
@@ -112,4 +113,8 @@ console.log("\x1b[2m", "|---------------- Network-SpeedTest CLI ---------------|
 console.log("\x1b[2m", "| Copyright (c) 2023 Cristian Andrei                   |\x1b[0m")
 console.log("\x1b[2m", "|______________________________________________________|\x1b[0m\n")
 
+
+//execSync("node ./node_modules/puppeteer/install.js");
 checkinternet();
+
+
