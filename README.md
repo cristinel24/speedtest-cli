@@ -19,6 +19,7 @@ npm install --global speedtest-cli.js
 
 ## Usage
 
+Just write this extremely difficult command in your terminal:
 ```
 speed
 ```
