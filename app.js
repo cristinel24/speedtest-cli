@@ -34,7 +34,6 @@ async function update(index) {
             process.stdout.write(`${colorize(90, 'Upload: ')}`);
             process.stdout.write(`${colorize(32, (stats.up).toFixed(1))}`);
             process.stdout.write(` mb/s`); break;
-            break;
     }
 
 }
@@ -74,7 +73,7 @@ async function checkinternet() {
 
         if (stats.isDone != false) {
             stats.isDone = true;
-            process.stdout.write(`${colorize(90, `\nIPv6: `)}`);
+            process.stdout.write(`${colorize(90, `\nIPv4: `)}`);
             process.stdout.write(`${colorize(36, stats.user_ip)}\n`);
             process.stdout.write(`${colorize(90, `City: `)}`);
             process.stdout.write(`${colorize(36, stats.city)}\n`);

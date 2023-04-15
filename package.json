@@ -1,6 +1,6 @@
 {
   "name": "speedtest-cli.js",
-  "version": "1.2.5",
+  "version": "1.2.7",
   "description": "Basic Network Speed Tester, using Node.js and Puppeteer package",
   "main": "app.js",
   "bin": {
